@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.6-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    networks: 
+      - net-backend
+    environment:
+      MYSQL_DATABASE: axr_challenge
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: secret
+    volumes:
+     - /home/database/mysql/conf:/etc/mysql/conf.d
+     - /home/database/mysql/:/var/lib/mysql
+     - /etc/localtime:/etc/localtime:ro
+    restart: always
+#  myadmin:
+#    image: phpmyadmin/phpmyadmin:4.7.0-1
+#    ports:
+#      - 8010:80
+#    networks: 
+#      - net-backend
+#    environment:
+#      PMA_HOST: mysql
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#    restart: always
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    networks: 
+#      - net-backend
+#    depends_on:
+#      - rabbitmq
+#      - mysql
+#    environment:
+#      INSERTION_QUEUE: insertion.queue
+#      VALIDATION_QUEUE: validation.queue
+#      NUMBER_OF_VALIDATION_CONSUMERS: 1
+#      RESPONSE_EXCHANGE: response.exchange
+#      RESPONSE_ROUTING_KEY: response.routing.key
+#      RABBITMQ_HOST: rabbitmq
+#      RABBITMQ_PORT: 5672
+#      RABBITMQ_VHOST: /
+#      RABBITMQ_USERNAME: guest
+#      RABBITMQ_PASSWORD: guest
+#      JDBC_URL: jdbc:mysql://mysql:3306/axr_challenge?user=root&password=secret
+#    links:
+#      - mysql:mysql
+#      - rabbitmq:rabbitmq
+      
+networks:
+  net-backend:
+  
